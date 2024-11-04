@@ -14,7 +14,10 @@ def abrir_datos_g(ruta, indices, direccionado):
     """
     
     datos_por_fila = []
-    ruta_archivo_csv = ruta 
+    ruta_archivo_csv = f"Quantum Optimization\Data\{ruta}"
+    print(ruta_archivo_csv)
+
+    
 
     try:
         with open(ruta_archivo_csv, 'r') as archivo:
@@ -152,7 +155,7 @@ def Algoritmo(backend: str, Indices: list, n_q: int, N_Q: int, Direccionado: boo
     
 if __name__ == "__main__":
     
-    layouts = Algoritmo("ibm_kyiv", [1], 2, 10)
+    layouts = Algoritmo("ibm_kyiv", [1], 2, 10, Direccionado=True)
     
     
             
