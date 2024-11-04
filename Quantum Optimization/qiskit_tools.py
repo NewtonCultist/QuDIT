@@ -8,9 +8,7 @@ from qiskit_ibm_runtime import SamplerV2 as Sampler
 from qiskit_ibm_runtime.fake_provider import FakeKyiv
 from qiskit.visualization import plot_histogram
 
-token_uc = "f357e84602c6054693aa4b405885636006fd0814819b4b5be7c2839059ae57b029bdf5092d66b9d84d0878d9daa7ea8f74497eeec41a075c54d59924f03ae020"
-token_respaldo = "3938d584da2079d438247185d70ebb11ba80d9918d093e48847ef0bae2baab10bce13b33c75918d79cdba7ce8458a58b15663a554f47d5241976a501294c90d0"
- 
+token = "f357e84602c6054693aa4b405885636006fd0814819b4b5be7c2839059ae57b029bdf5092d66b9d84d0878d9daa7ea8f74497eeec41a075c54d59924f03ae020" 
  
 def creacion_GHZ(qbits, q_r):
     c_r = ClassicalRegister(len(qbits))
@@ -29,7 +27,7 @@ def creacion_GHZ(qbits, q_r):
     return c
     
 def enviar_experimento(circuitos, backend, shot):
-    service = QiskitRuntimeService(channel= "ibm_quantum", token=token_uc)
+    service = QiskitRuntimeService(channel= "ibm_quantum", token=token)
     computador = service.backend(name=backend)
     pm = generate_preset_pass_manager(optimization_level=0, backend=computador)
     transpiled = pm.run(circuitos)
@@ -37,7 +35,7 @@ def enviar_experimento(circuitos, backend, shot):
     return job
     
 def enviar_experimento_layout(circuitos, backend, shot, layout):
-    service = QiskitRuntimeService(channel= "ibm_quantum", token=token_uc)
+    service = QiskitRuntimeService(channel= "ibm_quantum", token=token)
     computador = service.backend(name=backend)
     pm = generate_preset_pass_manager(optimization_level=0,initial_layout= layout, backend=computador)
     transpiled = pm.run(circuitos)
