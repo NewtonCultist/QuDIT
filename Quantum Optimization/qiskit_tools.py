@@ -11,6 +11,18 @@ from qiskit.visualization import plot_histogram
 token = "f357e84602c6054693aa4b405885636006fd0814819b4b5be7c2839059ae57b029bdf5092d66b9d84d0878d9daa7ea8f74497eeec41a075c54d59924f03ae020" 
  
 def creacion_GHZ(qbits, q_r):
+    """
+    Esta funcion se encarga de crear una instancia QuantumCircuit con un estado preparado GHZ
+    
+    INPUT
+    qbits: el layout deseado para el GHZ
+    q_r: la instancia QuantumRegister a utilizar en el circuito
+    
+    OUTPUT
+    QuantumCircuit con el GHZ
+    """
+    
+    
     c_r = ClassicalRegister(len(qbits))
     c = QuantumCircuit(q_r, c_r)
     c.h(q_r[qbits[0]])
@@ -27,6 +39,19 @@ def creacion_GHZ(qbits, q_r):
     return c
     
 def enviar_experimento(circuitos, backend, shot):
+    
+    """
+    Esta funcion se encarga de enviar un experimento con optimizacion 0
+    
+    INPUT
+    circuits: instancias QuantumCircuit con los experimentos a enviar
+    backend: backend fisico donde se quiere enviar el experimento
+    shot: numero de shots para el experimento
+    
+    OUTPUT
+    instancia job con el trabajo enviado
+    """
+    
     service = QiskitRuntimeService(channel= "ibm_quantum", token=token)
     computador = service.backend(name=backend)
     pm = generate_preset_pass_manager(optimization_level=0, backend=computador)
@@ -35,6 +60,20 @@ def enviar_experimento(circuitos, backend, shot):
     return job
     
 def enviar_experimento_layout(circuitos, backend, shot, layout):
+    
+    """
+    Esta funcion se encarga de enviar un experimento con optimizacion 0 y un layout especifico
+    
+    INPUT
+    circuits: instancias QuantumCircuit con los experimentos a enviar
+    backend: backend fisico donde se quiere enviar el experimento
+    shot: numero de shots para el experimento
+    layout: layout a usar
+    
+    OUTPUT
+    instancia job con el trabajo enviado
+    """
+    
     service = QiskitRuntimeService(channel= "ibm_quantum", token=token)
     computador = service.backend(name=backend)
     pm = generate_preset_pass_manager(optimization_level=0,initial_layout= layout, backend=computador)
@@ -42,6 +81,20 @@ def enviar_experimento_layout(circuitos, backend, shot, layout):
     job = computador.run(transpiled, shots=shot)
 
 def experimento_GHZ(listas_de_qbits, backend, shots):
+    
+    """
+    Esta funcion se encarga de enviar un experimento GHZ con optimizacion 0
+    
+    INPUT
+    listas_de_qbits: layouts para los experimentos GHZ
+    backend:  backend fisico
+    shots: numero de shots
+    
+    OUTPUT
+    instancia job con el trabajo enviado
+    """
+    
+    
     max_qbits = 0
     max_len_qbits = 0
     for i in listas_de_qbits:
@@ -55,12 +108,23 @@ def experimento_GHZ(listas_de_qbits, backend, shots):
 
     for j in listas_de_qbits:
         circuitos.append(creacion_GHZ(j, q_r))
-
     
-
-    enviar_experimento(circuitos=circuitos, backend=backend, shot=shots)
+    return enviar_experimento(circuitos=circuitos, backend=backend, shot=shots)
     
 def experimento_3l(listas_de_qbits, backend, shots):
+    
+    """
+    Esta funcion se encarga de enviar un experimento 3 layer state con optimizacion 0
+    
+    INPUT
+    listas_de_qbits: layouts para los experimentos 3 layer
+    backend:  backend fisico
+    shots: numero de shots
+    
+    OUTPUT
+    instancia job con el trabajo enviado
+    """
+    
     max_qbits = 0
     max_len_qbits = 0
     for i in listas_de_qbits:
@@ -81,8 +145,12 @@ def state_3layers(nq, layout, qr):
     """
     Generates a quantum circuit for an entangled state with 3 gates layers.
     The output state is equivalent to a 1-dimensional Cluster State.
+    
     Input:
-        nq= qubit number
+        nq: qubit number
+        layout: the layout of the experiment
+        qr: QuantumRegister of the experiment
+        
     Output:
         qc: quantum circuit 
     """
@@ -118,6 +186,19 @@ def state_3layers(nq, layout, qr):
     return qc
 
 def Fake_experimento_GHZ(layouts, backend, shots):
+    
+    """
+    Esta funcion se encarga de enviar un experimento GHZ con optimizacion 0 a un FakeBackend
+    
+    INPUT
+    layouts: los layouts de los experimentos GHZ
+    backend: el fake backend 
+    shots: numero de shots del experimento
+    
+    OUTPUT
+    resultados del experimento EN CONSTRUCCION
+    """
+    
     max_qbits = 0
     max_len_qbits = 0
     for i in layouts:
@@ -132,7 +213,6 @@ def Fake_experimento_GHZ(layouts, backend, shots):
     for j in layouts:
         circuitos.append(creacion_GHZ(j, q_r))
         
-    backend = FakeKyiv()
     pm = generate_preset_pass_manager(backend=backend, optimization_level=0)
     job = pm.run(circuitos)
     sampler = Sampler(backend=backend)

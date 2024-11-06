@@ -1,6 +1,10 @@
 import networkx as nx
 import numpy as np
 
+"""
+todos los grafos estan representados con la libreria networkx
+"""
+
 def abrir_datos_g(ruta, indices, direccionado):
     """
     Esta funcion se encarga de abrir los datos desde el archivo csv y transformarlo en un grafo
@@ -106,6 +110,17 @@ def abrir_datos_g(ruta, indices, direccionado):
     return grafo
 
 def caminos_a_distancia_especifica(G, nodo_inicial, distancia_objetivo):
+    """
+    Esta funcion se encarga de encontrar todos los caminos existentes desde un nodo inicial
+    y con un largo especifico
+    INPUT
+    G: grafo
+    nodo_inicial: nodo inicial
+    distancia_objetivo: Numero de nodos a recorrer
+    OUTPUT
+    lista de listas donde cada elemento es un camino representado por los indices de los nodos
+    """
+    
     # Calcular las distancias y los caminos más cortos desde el nodo_inicial
     distancias, caminos = nx.single_source_dijkstra(G, nodo_inicial, weight="length")
     
@@ -118,6 +133,18 @@ def caminos_a_distancia_especifica(G, nodo_inicial, distancia_objetivo):
     return list(caminos_en_distancia.values())
 
 def peso_del_camino(G, camino):
+    
+    """
+    Esta funcion se encarga de calcular el peso (o el error en nuestro contexto) de un camino especifico, 
+    considerando nodos y arristas
+    
+    INPUTS
+    G: grafo
+    camino: el camino al cual se desea calcular el peso representado como lista
+    
+    OUTPUT
+    variable int con el pesto del camino
+    """
     peso_total = 0
     
     # Sumar los pesos de las aristas que componen el camino
@@ -132,6 +159,19 @@ def peso_del_camino(G, camino):
     return peso_total
 
 def camino_min(G, distancia):
+    
+    """
+    Esta funcion se encarga de comparar todos los caminos existentes del grafo a una distancia en
+    especifico y buscar aquel con el menor peso
+    
+    INPUTS
+    G: grafo
+    distancia: distancia de los caminos que se quiere comparar
+    
+    OUTPUT
+    camino con el menor peso
+    """
+    
     dis_min = 100
     camino_min = []
     for node in G.nodes():
@@ -145,6 +185,26 @@ def camino_min(G, distancia):
     return camino_min
 
 def Algoritmo(backend: str, Indices: list, n_q: int, N_Q: int, Direccionado: bool):
+    
+    """
+    Esta funcion se encarga de combinar todas las funciones definidas anteriormente para 
+    crear el grafo con los errores de un backend y errores en especifico, luego encontrar
+    el camino de menor peso (o error en este contexto) para un numero de Qbits en el rango
+    [n_q; N_Q].
+    
+    
+    INPUTS
+    backend: backend a optimizar, solo introducir el nombre
+    Indices: indices de los errores deseados, el orden en especifico esta en main_graph.ipynb
+    n_q: limite inferior del numero de Qbits
+    N_Q: limite limite superior del numero de Qbits
+    Direccionado: True si se quiere considerar las conexiones del computador o False si lo contrario
+    
+    OUTPUT
+    lista de listas donde cada valor es el layout optimo
+    """
+    
+    
     G = abrir_datos_g(f"{backend}.csv", Indices, Direccionado)
     
     layouts=[]
